@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Landis.Library.Metadata;
-using Landis.Core;
-using Landis.Utilities;
+﻿//  Modified by:  SOSIEL Inc.
+
+using System;
 using System.IO;
-using Flel = Landis.Utilities;
+
+using Landis.Core;
+using Landis.Library.Metadata;
 
 namespace Landis.Extension.Output.Biomass
 {
@@ -14,7 +12,10 @@ namespace Landis.Extension.Output.Biomass
     {
         public static ExtensionMetadata Extension { get; set; }
         
-        public static void InitializeMetadata(int Timestep, string summaryLogName, bool makeTable)
+        public static void InitializeMetadata(
+            int Timestep, string summaryLogByEcoRegion, string summaryLogByManagementArea,
+            bool makeTable, bool makeTableByManagementArea
+        )
         {
 
             ScenarioReplicationMetadata scenRep = new ScenarioReplicationMetadata()
@@ -32,24 +33,39 @@ namespace Landis.Extension.Output.Biomass
             };
 
             //---------------------------------------
-            //          table outputs:   
+            //          table outputs:
             //---------------------------------------
 
             if (makeTable)
             {
-                CreateDirectory(summaryLogName);
-                PlugIn.summaryLog = new MetadataTable<SummaryLog>(summaryLogName);
-
-                PlugIn.ModelCore.UI.WriteLine("   Generating summary table...");
-                OutputMetadata tblOut_summary = new OutputMetadata()
+                CreateDirectory(summaryLogByEcoRegion);
+                PlugIn.summaryLogByEcoRegion = new MetadataTable<SummaryLogByEcoRegion>(summaryLogByEcoRegion);
+                PlugIn.ModelCore.UI.WriteLine("   Generating summary table by ecoregions...");
+                OutputMetadata tblSummaryByEcoRegion = new OutputMetadata()
                 {
                     Type = OutputType.Table,
                     Name = "SummaryLog",
-                    FilePath = PlugIn.summaryLog.FilePath,
+                    FilePath = PlugIn.summaryLogByEcoRegion.FilePath,
                     Visualize = true,
                 };
-                tblOut_summary.RetriveFields(typeof(SummaryLog));
-                Extension.OutputMetadatas.Add(tblOut_summary);
+                tblSummaryByEcoRegion.RetriveFields(typeof(SummaryLogByEcoRegion));
+                Extension.OutputMetadatas.Add(tblSummaryByEcoRegion);
+            }
+
+            if (makeTableByManagementArea)
+            {
+                CreateDirectory(summaryLogByManagementArea);
+                PlugIn.summaryLogByManagementArea = new MetadataTable<SummaryLogByMamanementArea>(summaryLogByManagementArea);
+                PlugIn.ModelCore.UI.WriteLine("   Generating summary table by management areas...");
+                OutputMetadata tblSummaryByManagementArea = new OutputMetadata()
+                {
+                    Type = OutputType.Table,
+                    Name = "SummaryLogByManagementArea",
+                    FilePath = PlugIn.summaryLogByManagementArea.FilePath,
+                    Visualize = true,
+                };
+                tblSummaryByManagementArea.RetriveFields(typeof(SummaryLogByMamanementArea));
+                Extension.OutputMetadatas.Add(tblSummaryByManagementArea);
             }
 
             //2 kinds of maps: species and pool maps, maybe multiples of each?
@@ -58,7 +74,7 @@ namespace Landis.Extension.Output.Biomass
             //---------------------------------------
 
 
-            foreach(ISpecies species in PlugIn.speciesToMap)
+            foreach (ISpecies species in PlugIn.speciesToMap)
             {
                 OutputMetadata mapOut_Species = new OutputMetadata()
                 {
@@ -87,7 +103,7 @@ namespace Landis.Extension.Output.Biomass
             };
             Extension.OutputMetadatas.Add(mapOut_TotalBiomass);
 
-            if(PlugIn.poolsToMap == "both" || PlugIn.poolsToMap == "woody")
+            if (PlugIn.poolsToMap == "both" || PlugIn.poolsToMap == "woody")
             {
                 OutputMetadata mapOut_WoodyDebris = new OutputMetadata()
                 {
@@ -102,7 +118,8 @@ namespace Landis.Extension.Output.Biomass
                 };
                 Extension.OutputMetadatas.Add(mapOut_WoodyDebris);
             }
-            if(PlugIn.poolsToMap == "non-woody" || PlugIn.poolsToMap == "both")
+
+            if (PlugIn.poolsToMap == "non-woody" || PlugIn.poolsToMap == "both")
             {
                 OutputMetadata mapOut_NonWoodyDebris = new OutputMetadata()
                 {
@@ -121,11 +138,8 @@ namespace Landis.Extension.Output.Biomass
             //---------------------------------------
             MetadataProvider mp = new MetadataProvider(Extension);
             mp.WriteMetadataToXMLFile("Metadata", Extension.Name, Extension.Name);
-
-
-
-
         }
+
         public static void CreateDirectory(string path)
         {
             path = path.Trim(null);
@@ -135,10 +149,8 @@ namespace Landis.Extension.Output.Biomass
             string dir = Path.GetDirectoryName(path);
             if (!string.IsNullOrEmpty(dir))
             {
-                Flel.Directory.EnsureExists(dir);
+                Landis.Utilities.Directory.EnsureExists(dir);
             }
-
-            return;
         }
     }
 }

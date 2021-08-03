@@ -1,24 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿//  Modified by:  SOSIEL Inc.
+
 using Landis.Library.Metadata;
 
 namespace Landis.Extension.Output.Biomass
 {
-    public class SummaryLog
+    public class SummaryLogByEcoRegion
     {
-
-        [DataFieldAttribute(Unit = FieldUnits.Year, Desc = "Simulation Year")]
+        [DataField(Unit = FieldUnits.Year, Desc = "Simulation Year")]
         public int Time { set; get; }
 
-        [DataFieldAttribute(Desc = "Ecoregion Name")]
+        [DataField(Desc = "Ecoregion Name")]
         public string EcoName { set; get; }
 
-        [DataFieldAttribute(Unit = FieldUnits.Count, Desc = "Number of Active Sites")]
+        [DataField(Unit = FieldUnits.Count, Desc = "Number of Active Sites")]
         public int NumActiveSites { set; get; }
 
-        [DataFieldAttribute(Desc = "Mean Aboveground Biomass by Species", SppList = true)]
+        [DataField(Desc = "Mean Aboveground Biomass by Species", SppList = true)]
+        public double[] AboveGroundBiomass_ { set; get; }
+    }
+
+    public class SummaryLogByMamanementArea
+    {
+        [DataField(Unit = FieldUnits.Year, Desc = "Simulation Year")]
+        public int Time { set; get; }
+
+        [DataField(Desc = "Management Area Map Code")]
+        public int ManagementAreaMapCode { set; get; }
+
+        [DataField(Unit = FieldUnits.Count, Desc = "Number of Active Sites")]
+        public int NumActiveSites { set; get; }
+
+        [DataField(Desc = "Mean Aboveground Biomass by Species", SppList = true)]
         public double[] AboveGroundBiomass_ { set; get; }
     }
 }

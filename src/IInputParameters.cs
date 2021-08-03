@@ -1,7 +1,9 @@
 //  Authors:  Robert M. Scheller, James B. Domingo
+//  Modified by:  SOSIEL Inc.
+
+using System.Collections.Generic;
 
 using Landis.Core;
-using System.Collections.Generic;
 
 namespace Landis.Extension.Output.Biomass
 {
@@ -69,6 +71,7 @@ namespace Landis.Extension.Output.Biomass
 		{
 			get;
 		}
-        bool MakeTable { get; }
-    }
+		bool MakeTableByEcoRegion { get; }
+		bool MakeTableByManagementArea { get; }
+	}
 }

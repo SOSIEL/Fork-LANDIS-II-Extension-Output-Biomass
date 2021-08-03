@@ -42,9 +42,16 @@
     <Reference Include="Landis.Library.Cohorts-v2">
       <HintPath>lib\Landis.Library.Cohorts-v2.dll</HintPath>
     </Reference>
+    <Reference Include="Landis.Library.HarvestManagement-v4">
+      <HintPath>lib\Landis.Library.HarvestManagement-v4.dll</HintPath>
+    </Reference>
     <Reference Include="Landis.Library.Metadata-v2">
       <HintPath>lib\Landis.Library.Metadata-v2.dll</HintPath>
     </Reference>
   </ItemGroup>
-  
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="$(ProjectDir)postbuild.bat $(Configuration)" />
+  </Target>
+
 </Project>

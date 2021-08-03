@@ -1,8 +1,10 @@
 //  Authors:  Robert M. Scheller, James B. Domingo
+//  Modified by:  SOSIEL Inc.
+
+using System.Collections.Generic;
 
 using Landis.Core;
 using Landis.Utilities;
-using System.Collections.Generic;
 
 namespace Landis.Extension.Output.Biomass
 {
@@ -17,8 +19,8 @@ namespace Landis.Extension.Output.Biomass
         private string speciesMapNames;
         private string selectedPools;
         private string poolMapNames;
-        private bool makeTable;
-
+        private bool makeTableByEcoRegion;
+        private bool makeTableByManagementArea;
 
         //---------------------------------------------------------------------
 
@@ -50,10 +52,12 @@ namespace Landis.Extension.Output.Biomass
 
         public string SpeciesMapNames
         {
-            get {
+            get
+            {
                 return speciesMapNames;
             }
-            set {
+            set
+            {
                 Biomass.SpeciesMapNames.CheckTemplateVars(value);
                 speciesMapNames = value;
             }
@@ -63,10 +67,12 @@ namespace Landis.Extension.Output.Biomass
 
         public string SelectedPools
         {
-            get {
+            get
+            {
                 return selectedPools;
             }
-            set {
+            set
+            {
             	if(value != "woody" && value != "non-woody" && value != "both")
                 	throw new InputValueException(selectedPools, "The dead pools {0} must be either 'woody' or 'non-woody' or 'both'");
                 selectedPools = value;
@@ -77,10 +83,12 @@ namespace Landis.Extension.Output.Biomass
 
         public string PoolMapNames
         {
-            get {
+            get
+            {
                 return poolMapNames;
             }
-            set {
+            set
+            {
                 Biomass.PoolMapNames.CheckTemplateVars(value); //, selectedPools);
                 poolMapNames = value;
             }
@@ -91,15 +99,27 @@ namespace Landis.Extension.Output.Biomass
         }
         //---------------------------------------------------------------------
 
-        public bool MakeTable
+        public bool MakeTableByEcoRegion
         {
             get
             {
-                return makeTable;
+                return makeTableByEcoRegion;
             }
             set
             {
-                makeTable = value;
+                makeTableByEcoRegion = value;
+            }
+        }
+
+        public bool MakeTableByManagementArea
+        {
+            get
+            {
+                return makeTableByManagementArea;
+            }
+            set
+            {
+                makeTableByManagementArea = value;
             }
         }
     }

@@ -1,8 +1,10 @@
 //  Authors:  Robert M. Scheller, James B. Domingo
+//  Modified by:  SOSIEL Inc.
+
+using System.Collections.Generic;
 
 using Landis.Core;
 using Landis.Utilities;
-using System.Collections.Generic;
 
 namespace Landis.Extension.Output.Biomass
 {
@@ -44,10 +46,15 @@ namespace Landis.Extension.Output.Biomass
 
             InputVar<bool> makeTable = new InputVar<bool>("MakeTable");
             if (ReadOptionalVar(makeTable))
-                parameters.MakeTable = makeTable.Value;
+                parameters.MakeTableByEcoRegion = makeTable.Value;
             else
-                parameters.MakeTable = false;
+                parameters.MakeTableByEcoRegion = false;
 
+            InputVar<bool> makeTableByManagementArea = new InputVar<bool>("MakeTableByManagementArea");
+            if (ReadOptionalVar(makeTableByManagementArea))
+                parameters.MakeTableByManagementArea = makeTableByManagementArea.Value;
+            else
+                parameters.MakeTableByManagementArea = false;
 
             //  Check for optional pair of parameters for species:
             //      Species

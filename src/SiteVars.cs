@@ -1,9 +1,9 @@
 //  Authors:  Robert M. Scheller, James B. Domingo
+//  Modified by:  SOSIEL Inc.
 
-using Landis.Core;
-using Landis.Library.BiomassCohorts;
 using Landis.Library.Biomass;
-using System.Collections.Generic;
+using Landis.Library.BiomassCohorts;
+using Landis.Library.HarvestManagement;
 using Landis.SpatialModeling;
 
 namespace Landis.Extension.Output.Biomass
@@ -16,7 +16,7 @@ namespace Landis.Extension.Output.Biomass
         private static ISiteVar<Pool> woodyDebris;
         private static ISiteVar<Pool> litter;
         private static ISiteVar<ISiteCohorts> cohorts;
-
+        private static ISiteVar<ManagementArea> managementArea;
 
         //---------------------------------------------------------------------
 
@@ -30,12 +30,14 @@ namespace Landis.Extension.Output.Biomass
             litter = PlugIn.ModelCore.GetSiteVar<Pool>("Succession.Litter");
 
             cohorts = PlugIn.ModelCore.GetSiteVar<ISiteCohorts>("Succession.BiomassCohorts");
-
             if (cohorts == null)
             {
                 string mesg = string.Format("Cohorts are empty.  Please double-check that this extension is compatible with your chosen succession extension.");
                 throw new System.ApplicationException(mesg);
             }
+
+            // Optional, may be not available
+            managementArea = PlugIn.ModelCore.GetSiteVar<ManagementArea>("BiomassHarvest.ManagementArea");
         }
 
         //---------------------------------------------------------------------
@@ -53,7 +55,8 @@ namespace Landis.Extension.Output.Biomass
         /// </summary>
         public static ISiteVar<Pool> WoodyDebris
         {
-            get {
+            get
+            {
                 return woodyDebris;
             }
         }
@@ -65,10 +68,24 @@ namespace Landis.Extension.Output.Biomass
         /// </summary>
         public static ISiteVar<Pool> Litter
         {
-            get {
+            get
+            {
                 return litter;
             }
         }
 
+        //---------------------------------------------------------------------
+
+        /// <summary>
+        /// A management area which the site belong to.
+        /// May be provided when SOSIEL Inc. modified version of the BiomassHarvest extension is used.
+        /// </summary>
+        public static ISiteVar<ManagementArea> ManagementArea
+        {
+            get
+            {
+                return managementArea;
+            }
+        }
     }
 }
